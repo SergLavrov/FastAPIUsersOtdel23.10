@@ -114,6 +114,13 @@ class vm_add_department(BaseModel):
     countWorker: int
 
 
+# 9.	Удаление отдела (Если есть сотрудники, выдать информацию: удаление невозможно)
+class vm_delete_department(BaseModel):
+    id: int
+    count_worker: int
+
+
+
 
 
 # 1.	Вывод всех сотрудников в виде (Имя, должность, телефон)
@@ -213,7 +220,6 @@ def get_department_workers(depart_id: int):
 
 
 
-
 # 6.	Получение информации об отделах (Название, количество сотрудников)
 @app.get("/info-department/{depart_id}")
 def info_department(depart_id: int):
@@ -247,3 +253,20 @@ def add_department(department: vm_add_department):
         return {"message": "Success"}
     except:
         return {"error": traceback.format_exc()}
+
+
+# 9.	Удаление отдела (Если есть сотрудники, выдать информацию: удаление невозможно)
+@app.delete("/delete-department/{department_id}")
+def delete_department(department_id, count_worker: int):
+    try:
+        # cursor.execute(f"DELETE FROM department WHERE id = {department_id} AND {count_worker} IS NULL")
+
+        # cursor.execute(f"DELETE FROM department WHERE id = {department_id} IN (SELECT {count_worker} FROM department WHERE {count_worker} IS NULL)")
+
+        connect.commit()
+        return {"message": "Success"}
+
+    except:
+        return {"error": traceback.format_exc()}
+
+
